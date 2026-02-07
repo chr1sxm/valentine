@@ -43,7 +43,6 @@ body {
     background:white;
     color:#ff4d6d;
     cursor:pointer;
-    margin-top:20px;
 }
 
 /* Main container */
@@ -58,10 +57,6 @@ body {
 h1 {
     font-family:'Great Vibes', cursive;
     font-size:52px;
-    color:white;
-}
-
-p {
     color:white;
 }
 
@@ -87,26 +82,40 @@ button {
 
 #message {
     margin-top:20px;
-    font-size:26px;
+    font-size:28px;
     color:white;
     display:none;
     font-family:'Great Vibes', cursive;
 }
 
-/* Hearts */
+/* Floating hearts */
 .heart {
     position:absolute;
     color:white;
-    animation:float 5s linear infinite;
+    animation:floatUp 5s linear infinite;
 }
 
-@keyframes float {
+/* Floating heart image */
+.photoHeart {
+    position:absolute;
+    width:120px;
+    height:120px;
+    background-image:url('photo.jpg');
+    background-size:cover;
+    background-position:center;
+    animation:floatUp 6s linear infinite;
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+
+    clip-path: path("M 60 100 C 20 70, 0 40, 30 20 C 50 10, 60 30, 60 30 C 60 30, 70 10, 90 20 C 120 40, 100 70, 60 100 Z");
+}
+
+@keyframes floatUp {
     from {
-        transform:translateY(100vh);
+        transform:translateY(100vh) scale(0.5);
         opacity:1;
     }
     to {
-        transform:translateY(-10vh);
+        transform:translateY(-20vh) scale(1);
         opacity:0;
     }
 }
@@ -122,7 +131,6 @@ button {
 
 <div class="container">
     <h1>Will you be my Valentine? ❤️</h1>
-    <p>You make my world brighter every day</p>
 
     <button id="yes" onclick="sayYes()">Yes ❤️</button>
     <button id="no" onmouseover="moveNo()">No</button>
@@ -138,35 +146,33 @@ button {
 
 <script>
 
-// Start button logic
+// Start music
 document.getElementById("startBtn").addEventListener("click", function() {
 
-    const music = document.getElementById("bgMusic");
-
-    music.play()
-    .then(() => {
-        console.log("Music started");
-    })
-    .catch(err => {
-        console.log("Error:", err);
-    });
+    document.getElementById("bgMusic").play();
 
     document.getElementById("startScreen").style.display = "none";
 });
 
-// Yes button
+// Yes pressed
 function sayYes() {
+
     document.getElementById("message").style.display = "block";
+
+    // create floating photo hearts continuously
+    setInterval(createPhotoHeart, 600);
 }
 
 // Move No button
 function moveNo() {
+
     const no = document.getElementById("no");
+
     no.style.top = Math.random()*80 + "%";
     no.style.left = Math.random()*80 + "%";
 }
 
-// Floating hearts
+// Floating normal hearts
 function createHeart() {
 
     const heart = document.createElement("div");
@@ -181,11 +187,24 @@ function createHeart() {
 
     document.body.appendChild(heart);
 
-    setTimeout(() => {
-        heart.remove();
-    }, 5000);
+    setTimeout(() => heart.remove(), 5000);
 }
 
+// Floating photo hearts
+function createPhotoHeart() {
+
+    const photo = document.createElement("div");
+
+    photo.classList.add("photoHeart");
+
+    photo.style.left = Math.random()*100 + "vw";
+
+    document.body.appendChild(photo);
+
+    setTimeout(() => photo.remove(), 6000);
+}
+
+// Start normal hearts always
 setInterval(createHeart, 300);
 
 </script>
