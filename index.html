@@ -13,12 +13,16 @@ body {
     padding:0;
     height:100vh;
     background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
     font-family: 'Poppins', sans-serif;
     display:flex;
     justify-content:center;
     align-items:center;
     text-align:center;
     overflow:hidden;
+    transition: background 1.5s ease;
 }
 
 /* Start screen */
@@ -74,6 +78,10 @@ button {
     color:white;
 }
 
+#yes:hover {
+    transform:scale(1.1);
+}
+
 #no {
     background:white;
     color:#ff4d6d;
@@ -95,27 +103,13 @@ button {
     animation:floatUp 5s linear infinite;
 }
 
-/* Floating heart image */
-.photoHeart {
-    position:absolute;
-    width:120px;
-    height:120px;
-    background-image:url('photo.jpg');
-    background-size:cover;
-    background-position:center;
-    animation:floatUp 6s linear infinite;
-    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
-
-    clip-path: path("M 60 100 C 20 70, 0 40, 30 20 C 50 10, 60 30, 60 30 C 60 30, 70 10, 90 20 C 120 40, 100 70, 60 100 Z");
-}
-
 @keyframes floatUp {
     from {
-        transform:translateY(100vh) scale(0.5);
+        transform:translateY(100vh);
         opacity:1;
     }
     to {
-        transform:translateY(-20vh) scale(1);
+        transform:translateY(-10vh);
         opacity:0;
     }
 }
@@ -154,13 +148,16 @@ document.getElementById("startBtn").addEventListener("click", function() {
     document.getElementById("startScreen").style.display = "none";
 });
 
-// Yes pressed
+// Yes pressed → change background to photo
 function sayYes() {
 
     document.getElementById("message").style.display = "block";
 
-    // create floating photo hearts continuously
-    setInterval(createPhotoHeart, 600);
+    document.body.style.background =
+        "linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('photo.jpg')";
+
+    document.body.style.backgroundSize = "cover";
+    document.body.style.backgroundPosition = "center";
 }
 
 // Move No button
@@ -172,7 +169,7 @@ function moveNo() {
     no.style.left = Math.random()*80 + "%";
 }
 
-// Floating normal hearts
+// Floating hearts
 function createHeart() {
 
     const heart = document.createElement("div");
@@ -190,21 +187,6 @@ function createHeart() {
     setTimeout(() => heart.remove(), 5000);
 }
 
-// Floating photo hearts
-function createPhotoHeart() {
-
-    const photo = document.createElement("div");
-
-    photo.classList.add("photoHeart");
-
-    photo.style.left = Math.random()*100 + "vw";
-
-    document.body.appendChild(photo);
-
-    setTimeout(() => photo.remove(), 6000);
-}
-
-// Start normal hearts always
 setInterval(createHeart, 300);
 
 </script>
